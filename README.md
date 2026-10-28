@@ -269,66 +269,6 @@ WaterPulse UG Express Backend
                We have alerted the District Water Office."
 ```
 
-### Local Testing with Ngrok & Africa's Talking Sandbox
-
-1. **Start the local dev server**:
-   ```bash
-   npm run dev
-   ```
-
-2. **Expose port 3000 using Ngrok**:
-   ```bash
-   ngrok http 3000
-   ```
-   Copy the generated HTTPS URL, e.g. `https://xxxx-xx-xx.ngrok-free.app`.
-
-3. **Configure Africa's Talking Sandbox SMS Callback URL**:
-   - Go to [Africa's Talking Sandbox Dashboard](https://account.africastalking.com/).
-   - Navigate to **SMS** > **SMS Callback URLs** > **Incoming Messages**.
-   - Set the callback URL to:
-     ```
-     https://xxxx-xx-xx.ngrok-free.app/api/sms/incoming
-     ```
-   - Click **Submit**.
-
-4. **Simulate Inbound SMS from the Sandbox Simulator**:
-   - Launch the Africa's Talking Simulator: [https://simulator.africastalking.com:1517/](https://simulator.africastalking.com:1517/)
-   - Enter your sandbox phone number (e.g., `+256771234567`).
-   - Send an SMS to the sandbox shortcode (e.g., `20880`):
-     ```
-     Borehole broken Mukono near St Kizito School 5 days 300 people
-     ```
-   - Check the console logs in your terminal:
-     You will observe the unstructured SMS parsed, scored at 65 pts (Medium), reporter number masked, and an automated SMS response dispatched to the simulator.
-
-5. **Instant CLI Test via cURL**:
-   You can also test the webhook directly without Ngrok:
-   ```bash
-   curl -X POST http://localhost:3000/api/sms/incoming \
-     -H "Content-Type: application/json" \
-     -d '{
-       "from": "+256771234567",
-       "to": "20880",
-       "text": "Borehole broken Mukono near St Kizito School 5 days 300 people",
-       "id": "ATXid_1234567"
-     }'
-   ```
-
-6. **View Inbound SMS Log**:
-   Inspect processed SMS tickets anytime at:
-   ```bash
-   curl http://localhost:3000/api/sms/incoming
-   ```
-
-### 5. Production Build
-Compile both the frontend assets and server bundle:
-```bash
-npm run build
-npm start
-```
-
----
-
 ## 🧪 Deterministic Scoring Test Cases
 
 To verify algorithmic integrity, run `npm test`. Below is an example test scenario:
